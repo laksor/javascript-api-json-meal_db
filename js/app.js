@@ -25,9 +25,9 @@ const displaySearchResult = meals => {
         const div = document.createElement('div');
         div.classList.add('col');
         div.innerHTML = `
-        <div class="card shadow-lg">
+        <div onclick="loadMealDetails()" class="card shadow-lg">
             <img src="${meal.strMealThumb}" class="card-img-top" alt="...">
-            <div class="card-body">
+            <div  class="card-body">
                 <h5 class="card-title fw-bold text-danger">${meal.strMeal}</h5>
                 <p class="card-text text-md-start "><span class="fw-bold text-success">Cooking Instructions : </span>${meal.strInstructions.slice(0, 180)}</p>
                 <a href="${meal.strYoutube}" target="_blank" class="btn btn-danger rounded-pill">Watch on Youtube</a>
@@ -42,13 +42,24 @@ const displaySearchResult = meals => {
 const loadMealDetails = async mealId => {
     const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`;
 
-    const res = await fetch(url);
-    const data = await res.json();
-    displayMealDetails(data.meals[0]);
+    try{
+        const res = await fetch(url);
+        const data = await res.json();
+        displayMealDetails(data.meals);
+
+    }
+    catch(error){
+        console.log(error);
+    }
+
+    // const res = await fetch(url);
+    // const data = await res.json();
+    // displayMealDetails(data.meals[0]);
 
     // fetch(url)
     //     .then(res => res.json())
-    //     .then(data => console.log(data.meals.idMeal));
+    //     .then(data => displayMealDetails(data.meals));
+        
 }
 
 const displayMealDetails = meal => {
@@ -59,9 +70,7 @@ const displayMealDetails = meal => {
         div.innerHTML = `
         <img src="${meal.strMealThumb}" class="card-img-top" alt="...">
         <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <h5 class="card-title">${meal.strMeal}</h5>
         </div>
         `;
         mealDiv.appendChild(div);
